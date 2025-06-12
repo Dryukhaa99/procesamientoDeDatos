@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Calculadora Binaria</title>
+</head>
+<style> 
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+}
+.titulo{
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: crimson;
+}
+#resultado{
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: #333;
+}
+.boton{
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  border-radius: 5px;
+  background-color: crimson;
+  color: antiquewhite;
+  height: 25px;
+  width: 27px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in, color 0.2s ease-in;
+}
+.boton:hover{
+  background-color: #a0183b;
+}
+.input{
+    height: 22px;
+    width: 150px;
+    border-radius: 5px;
+    border: solid 1px lightslategray;
+}
+</style>
+<body>
+<div id="contenedorPrincipal">
+    <h1 class="titulo">Calculadora Binaria</h1>
+    <div id="contenedor">
+        <input type="number" class="input" id="valor1" placeholder="ingrese un número" oninput="validarBinario(this)">
+        <input type="number" class="input" id="valor2" placeholder="ingrese un número" oninput="validarBinario(this)">
+
+        <button class="boton" type="button" onclick="suma()">+</button>
+        <button class="boton" type="button" onclick="resta()">-</button>
+    </div>
+    <h2 class="titulo">Resultado</h2>
+    <h4 id="resultado"></h4>
+</div>
+
+
+<script>
+    const regexSoloBinarios = /[^01]/g; 
+    const regexBinario = /^[01]+$/;
+
+    function validarBinario(inputElement) {
+        inputElement.value = inputElement.value.replace(regexSoloBinarios, '');
+    }
+    
+    function decimalABinario(decimal) {
+        if (decimal < 0) {
+            return "-" + (Math.abs(decimal)).toString(2);
+        }
+            return decimal.toString(2);
+    }
+
+    function binarioADecimal(binario) {
+       return parseInt(binario, 2);
+    }
+
+    function obtenerValoresBinarios() {
+    let valorA = document.getElementById('valor1').value.trim();
+    let valorB = document.getElementById('valor2').value.trim();
+
+    if (!regexBinario.test(valorA) || !regexBinario.test(valorB)) {
+        alert("Por favor, introduce solo los dígitos 0 y 1 en ambos campos.");
+        mostrarResultado("Entrada Inválida");
+        return null; 
+    }
+    const valorA_decimal = binarioADecimal(valorA);
+    const valorB_decimal = binarioADecimal(valorB);
+    
+    return { a: valorA_decimal, b: valorB_decimal };
+}
+function mostrarResultado(resultado) {
+    document.getElementById('resultado').textContent = resultado;
+}
+
+function suma() {
+    const valores = obtenerValoresBinarios();
+    if (valores === null) {
+        return; 
+    }
+
+    const resultadoDecimal = valores.a + valores.b;
+    const resultadoBinario = decimalABinario(resultadoDecimal);
+    mostrarResultado(resultadoBinario);
+}
+
+function resta() {
+    const valores = obtenerValoresBinarios();
+    if (valores === null) {
+        return;
+    }
+
+    const resultadoDecimal = valores.a - valores.b;
+    const resultadoBinario = decimalABinario(resultadoDecimal);
+    mostrarResultado(resultadoBinario);
+}
+</script>
+</body>
+</html>
